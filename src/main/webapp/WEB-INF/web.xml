@@ -1,0 +1,26 @@
+<!--
+    welcome-file-list
+    웹 애플리케이션의 "기본 진입 페이지"를 지정하는 설정이다.
+    
+    사용자가 아래와 같이 URL을 입력했을 때:
+    http://localhost:8080/jsp-test/
+    
+    서버는 welcome-file-list에 정의된 파일(또는 경로)을
+    순서대로 찾아 자동으로 실행한다.
+-->
+<welcome-file-list>
+    <!--
+        welcome-file
+        '/' 요청이 들어왔을 때 가장 먼저 찾을 리소스 이름
+        
+        여기서 'home'은 실제 파일명이 아니라
+        다음 중 하나로 해석될 수 있다:
+
+        1) home.jsp
+        2) /home 으로 매핑된 Servlet (@WebServlet("/home"))
+        3) web.xml에 설정된 다른 서블릿 매핑
+
+        즉, JSP일 수도 있고 Servlet일 수도 있다.
+    -->
+    <welcome-file>home</welcome-file>
+</welcome-file-list>
