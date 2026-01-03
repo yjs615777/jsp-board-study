@@ -1,26 +1,111 @@
-<!--
-    welcome-file-list
-    웹 애플리케이션의 "기본 진입 페이지"를 지정하는 설정이다.
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    web.xml = Deployment Descriptor
     
-    사용자가 아래와 같이 URL을 입력했을 때:
-    http://localhost:8080/jsp-test/
-    
-    서버는 welcome-file-list에 정의된 파일(또는 경로)을
-    순서대로 찾아 자동으로 실행한다.
+    역할: 서버(Tomcat)에게 "이 웹 애플리케이션을 어떻게 실행할지" 알려주는 설정 파일
 -->
-<welcome-file-list>
-    <!--
-        welcome-file
-        '/' 요청이 들어왔을 때 가장 먼저 찾을 리소스 이름
-        
-        여기서 'home'은 실제 파일명이 아니라
-        다음 중 하나로 해석될 수 있다:
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+         <!-- 
+        version="4.0" = Servlet 4.0 버전 사용
+  		  -->
+         
 
-        1) home.jsp
-        2) /home 으로 매핑된 Servlet (@WebServlet("/home"))
-        3) web.xml에 설정된 다른 서블릿 매핑
-
-        즉, JSP일 수도 있고 Servlet일 수도 있다.
+ <!-- 
+        display-name
+        - 서버 관리자 화면에 표시되는 애플리케이션 이름
+        - Tomcat Manager에서 이 이름으로 보임
     -->
+    <display-name>MAISON - Luxury Fashion Brand Directory</display-name>
+    
+    <!-- 
+        description
+        - 애플리케이션 설명 (문서화 목적)
+        - 실제 동작엔 영향 없음
+    -->
+    <description>
+        A sophisticated web application for exploring luxury fashion brands.
+        Built with Java Servlet/JSP following MVC pattern.
+    </description>
+<!-- 
+        welcome-file-list
+        
+        사용자가 루트 URL만 입력했을 때 어떤 페이지를 보여줄지 결정
+        
+        예시:
+        http://localhost:8080/프로젝트명/   이렇게만 입력하면
+         서버가 자동으로 /home 을 찾아서 실행
+        
+        동작 순서:
+        1. 사용자: http://localhost:8080/fashion-search/
+        2. 서버: "welcome-file-list를 확인"
+        3. 서버: "<welcome-file>home</welcome-file> 발견"
+        4. 서버: "@WebServlet("/home") 있는지 찾기"
+        5. 서버: "HomeServlet 실행"
+    -->
+<welcome-file-list>
+    <!-- 
+            여기서 'home'은
+            - 실제 파일(home.jsp)가 아니라
+            - @WebServlet("/home")로 매핑된 Servlet을 의미
+            
+            만약 찾지 못하면
+             다음 순서로 찾음: index.html, index.jsp 등
+        -->
     <welcome-file>home</welcome-file>
 </welcome-file-list>
+<!-- 
+        session-config
+        세션(사용자 로그인 상태 유지) 설정
+        
+        세션이란
+        - 서버가 사용자를 기억하는 시간
+        - 장바구니, 로그인 정보 등을 임시 저장
+    -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+        <!-- 
+            30분 = 사용자가 아무 활동 안 하면 30분 후 세션 만료
+            
+        -->
+    </session-config>
+
+<!-- 
+        error-page
+        에러 발생 시 사용자에게 보여줄 페이지 설정
+       
+        - 기본 에러 페이지로는 부족함 (Tomcat 기본 화면)
+        - 에러 페이지로 UX 개선
+    -->
+    <error-page>
+        <error-code>404</error-code>
+        <!-- 
+            404 = Not Found (페이지를 찾을 수 없음)
+            
+            발생 상황:
+            - 존재하지 않는 URL 입력
+            - /brand?id=999 (999번 브랜드 없음)
+        -->
+        <location>/WEB-INF/views/error/404.jsp</location>
+        <!-- 
+            이 JSP 파일을 보여줌
+        -->
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <!-- 
+            500 = Internal Server Error (서버 내부 오류)
+            
+            발생 상황:
+            - Java 코드에서 예외(Exception) 발생
+            - NullPointerException, 잘못된 SQL 쿼리 등
+        -->
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    
+
+</web-app>
